@@ -104,7 +104,7 @@ def plot_monthly_payments(monthly_payment, loan_term):
     st.pyplot(plt)
 
 # Streamlit UI setup
-st.title("🏡 Home Affordability Calculator")
+st.title("🏠 Home Affordability Calculator")
 
 col1, col2, col3 = st.columns([1, 1, 1])
 
@@ -122,7 +122,7 @@ with col2:
         st.error("Interest rate must be between 1.0% and 10.0%.")
 
 with col3:
-    property_tax = st.number_input("🏡 Tax ($)", min_value=0.0, max_value=50000.0, step=100.0, value=0.0)
+    property_tax = st.number_input("🏠 Tax ($)", min_value=0.0, max_value=50000.0, step=100.0, value=0.0)
     home_insurance = st.number_input("🔒 Insurance ($)", min_value=0.0, max_value=20000.0, step=100.0, value=0.0)
     flood_insurance = st.number_input("🌊 Flood Ins. ($)", min_value=0.0, max_value=20000.0, step=100.0, value=0.0)
 
@@ -130,7 +130,7 @@ with col3:
 max_loan_limit = loan_limits[num_units]["high_balance"]
 
 loan_options = [key for key, values in loan_formulas.items()]
-selected_formula = st.selectbox("📜 Loan Formula", loan_options)
+selected_formula = st.selectbox("📄 Loan Formula", loan_options)
 
 # Initialize session state variables if not already set
 if 'button_clicked' not in st.session_state:
@@ -205,12 +205,12 @@ if st.session_state.button_clicked:
     # Validate high balance formulas
     elif selected_formula.startswith("HB") and (loan_amount <= loan_limits[num_units]["conforming"] or loan_amount > loan_limits[num_units]["high_balance"]):
         st.markdown(f'<div style="background-color:red; color:white; padding:10px; font-size:16px;">'
-                    f'<strong>Loan amount (${loan_amount:,.2f}) exceeds the high-balance limit for {num_units}-unit property (${loan_limits[num_units]["high_balance"]:,.2f}) or is below the conforming limit (${loan_limits[num_units]["conforming"]:,.2f}).</strong></div>',
+                    f'<strong>Loan amount (${loan_amount:,.2f}) exceeds the high-balance limit for {num_units}-unit property (${loan_limits[num_units]["high_balance"]:,.2f}) or is below the confo[...]
                     unsafe_allow_html=True)
 
         next_formula = None
         for key, values in loan_formulas.items():
-            if key != selected_formula and key.startswith("HB") and (loan_limits[num_units]["conforming"] < purchase_price * (1 - values["down_payment"] / 100) <= loan_limits[num_units]["high_balance"]):
+            if key != selected_formula and key.startswith("HB") and (loan_limits[num_units]["conforming"] < purchase_price * (1 - values["down_payment"] / 100) <= loan_limits[num_units]["high_bal[...]
                 next_formula = key
                 break
 
@@ -260,10 +260,4 @@ if st.session_state.button_clicked:
             if st.button(f"🔄 Switch to {next_formula} (Eligible Formula)\nTotal Cash to Close: ${new_cash_to_close_next:,.2f}"):
                 selected_formula = next_formula
                 down_payment_pct = loan_formulas[next_formula]["down_payment"] / 100
-                total_sale_price, loan_amount, cash_to_close, monthly_payment, total_monthly_payment = calculate_loan(
-                    purchase_price, loan_term, interest_rate, down_payment_pct, loan_formulas[next_formula]["seller_concession"] / 100, property_tax, home_insurance, flood_insurance
-                )
-
-                st.write(f"Loan Amount: ${loan_amount:,.2f}")
-                st.write(f"Monthly Payment: ${monthly_payment:,.2f}")
-                st.write
+                total_sale_price, loan_amount,
