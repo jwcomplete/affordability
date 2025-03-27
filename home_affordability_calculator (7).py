@@ -1,5 +1,8 @@
 
 import streamlit as st
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 
 # Loan formula setup and max limits
 loan_formulas = {
@@ -58,6 +61,20 @@ def calculate_loan(purchase_price, loan_term, interest_rate, down_payment_pct, s
 
     return total_sale_price, loan_amount, cash_to_close, monthly_payment, total_monthly_payment
 
+# Function to plot monthly payments over time
+def plot_monthly_payments(monthly_payment, loan_term):
+    months = np.arange(1, loan_term * 12 + 1)
+    payments = np.full_like(months, monthly_payment)
+    
+    plt.figure(figsize=(10, 5))
+    plt.plot(months, payments, label='Monthly Payment', color='blue')
+    plt.xlabel('Month')
+    plt.ylabel('Payment ($)')
+    plt.title('Monthly Payment Over Time')
+    plt.legend()
+    plt.grid(True)
+    st.pyplot(plt)
+
 # Streamlit UI setup
 st.title("🏡 Home Affordability Calculator")
 
@@ -66,16 +83,20 @@ col1, col2, col3 = st.columns([1, 1, 1])
 with col1:
     occupancy_type = st.selectbox("🏠 Occupancy", ["Primary Residence", "Second Home", "Investment Property"])
     num_units = st.selectbox("🏢 Units", [1, 2, 3, 4])
-    purchase_price = float(st.number_input("💰 Price ($)", min_value=50000.0, max_value=999999999.0, step=5000.0, value=807000.0))
+    purchase_price = st.number_input("💰 Price ($)", min_value=50000.0, max_value=999999999.0, step=5000.0, value=807000.0)
 
 with col2:
-    loan_term = float(st.number_input("📆 Term (Years)", min_value=5.0, max_value=30.0, step=5.0, value=30.0))
-    interest_rate = float(st.number_input("📊 Interest (%)", min_value=1.0, max_value=10.0, step=0.001, value=5.625))
+    loan_term = st.number_input("📆 Term (Years)", min_value=5.0, max_value=30.0, step=5.0, value=30.0)
+    interest_rate = st.number_input("📊 Interest (%)", min_value=1.0, max_value=10.0, step=0.001, value=5.625)
+
+    # Validate interest rate
+    if interest_rate < 1.0 or interest_rate > 10.0:
+        st.error("Interest rate must be between 1.0% and 10.0%.")
 
 with col3:
-    property_tax = float(st.number_input("🏡 Tax ($)", min_value=0.0, max_value=50000.0, step=100.0, value=0.0))
-    home_insurance = float(st.number_input("🔒 Insurance ($)", min_value=0.0, max_value=20000.0, step=100.0, value=0.0))
-    flood_insurance = float(st.number_input("🌊 Flood Ins. ($)", min_value=0.0, max_value=20000.0, step=100.0, value=0.0))
+    property_tax = st.number_input("🏡 Tax ($)", min_value=0.0, max_value=50000.0, step=100.0, value=0.0)
+    home_insurance = st.number_input("🔒 Insurance ($)", min_value=0.0, max_value=20000.0, step=100.0, value=0.0)
+    flood_insurance = st.number_input("🌊 Flood Ins. ($)", min_value=0.0, max_value=20000.0, step=100.0, value=0.0)
 
 # Determine the max loan limit based on the number of units
 max_loan_limit = loan_limits[num_units]["high_balance"]
@@ -106,6 +127,9 @@ if st.session_state.button_clicked:
     st.write(f"Cash to Close: ${cash_to_close:,.2f}")
     st.write(f"Monthly Payment: ${monthly_payment:,.2f}")
     st.write(f"Total Monthly Payment (Including Taxes & Insurance): ${total_monthly_payment:,.2f}")
+
+    # Plot monthly payments
+    plot_monthly_payments(monthly_payment, loan_term)
 
     # Validate conforming formulas
     if selected_formula.startswith("C") and loan_amount > loan_limits[num_units]["conforming"]:
@@ -214,20 +238,4 @@ if st.session_state.button_clicked:
 
                 st.write(f"Loan Amount: ${loan_amount:,.2f}")
                 st.write(f"Monthly Payment: ${monthly_payment:,.2f}")
-                st.write(f"Total Monthly Payment: ${total_monthly_payment:,.2f}")
-
-    # Check LTV limits based on occupancy type
-    ltv = (loan_amount / total_sale_price) * 100
-
-    if occupancy_type == "Primary Residence":
-        if ltv > 90:
-            max_seller_concession = 0.03
-        else:
-            max_seller_concession = 0.06
-    elif occupancy_type == "Second Home":
-        if ltv > 90:
-            st.markdown(f'<div style="background-color:red; color:white; padding:10px; font-size:16px;">'
-                        f'<strong>Selected formula is not allowed for Second Home with LTV exceeding 90%.</strong></div>',
-                        unsafe_allow_html=True)
-        else:
-            max
+                st.write
