@@ -29,7 +29,7 @@ jobs:
     - name: Run script
       run: |
         mkdir -p results
-        python updated_loan_calculator_app.py
+        python "home_affordability_calculator (7).py"
 
     - name: Archive results
       uses: actions/upload-artifact@v2
