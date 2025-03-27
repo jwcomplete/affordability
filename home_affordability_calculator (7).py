@@ -6,6 +6,7 @@ st.set_page_config(page_title="Build Your Profile", layout="wide")
 # Custom CSS for input widths
 st.markdown("""
     <style>
+    .element-container:has(.stToggle) { display: flex; align-items: center; gap: 0.5rem; }
     div[data-baseweb="input"] input {
         max-width: 400px;
     }
@@ -15,7 +16,15 @@ st.markdown("""
     div[data-baseweb="select"] {
         max-width: 180px;
     }
-    </style>
+    .stToggle {
+        display: flex;
+        align-items: center !important;
+        margin-top: -0.1rem;
+    }
+.stToggle > label {
+        margin-top: -8px !important;
+    }
+</style>
 """, unsafe_allow_html=True)
 
 st.title("📄 Build Your Profile")
@@ -34,37 +43,37 @@ with col1:
     with col_val:
         estimated_value = st.number_input("Estimated Value ($)", min_value=0.0, max_value=9999999999.00, step=1000.0)
     with col_occ:
-        occupancy_type = st.selectbox("Intended Occupancy", ["Owner-Occupied", "Second Home", "Investment"])
+        occupancy_type = st.selectbox("Occupancy", ["Owner-Occupied", "Second Home", "Investment"])
     with col_flood:
         flood_zone = st.selectbox("Flood Zone", ["Yes", "No"], key="flood_zone")
     with col_units:
-        num_units = st.selectbox("# of Units", [1, 2, 3, 4], key="num_units")
+        num_units = st.selectbox(" # of Units", [1, 2, 3, 4], key="num_units")
 
     st.markdown("### 🏘️ Accessory Unit")
-    col_acc_q, col_acc_a = st.columns([3, 1])
+    col_acc_q, col_acc_a = st.columns([5, 1])
     with col_acc_q:
         st.markdown("**Does the property have an accessory unit?**")
     with col_acc_a:
-        accessory_unit = st.selectbox(" ", ["No", "Yes"], key="accessory_unit")
+        accessory_unit = st.toggle(" ", value=False, key="accessory_unit")
 
-    if accessory_unit == "Yes":
-        col_sep_q, col_sep_a = st.columns([3, 1])
+    if accessory_unit:
+        col_sep_q, col_sep_a = st.columns([5, 1])
         with col_sep_q:
             st.markdown("**Interior separation from primary unit?**")
         with col_sep_a:
-            interior_separation = st.selectbox(" ", ["No", "Yes"], key="interior_separation")
-        col_kitch_q, col_kitch_a = st.columns([3, 1])
+            interior_separation = st.toggle(" ", value=False, key="interior_separation")
+        col_kitch_q, col_kitch_a = st.columns([5, 1])
         with col_kitch_q:
             st.markdown("**Kitchen with fridge, stove, sink?**")
         with col_kitch_a:
-            has_kitchen = st.selectbox(" ", ["No", "Yes"], key="has_kitchen")
-        col_bath_q, col_bath_a = st.columns([3, 1])
+            has_kitchen = st.toggle(" ", value=False, key="has_kitchen")
+        col_bath_q, col_bath_a = st.columns([5, 1])
         with col_bath_q:
             st.markdown("**Bathroom present?**")
         with col_bath_a:
-            has_bathroom = st.selectbox(" ", ["No", "Yes"], key="has_bathroom")
+            has_bathroom = st.toggle(" ", value=False, key="has_bathroom")
 
-        if all(ans == "Yes" for ans in [interior_separation, has_kitchen, has_bathroom]) and num_units == 1:
+        if all([interior_separation, has_kitchen, has_bathroom]) and num_units == 1:
             proposed_rent = st.number_input("Proposed Market Rent for Accessory Unit ($)", min_value=0.0)
 
 with col2:
