@@ -236,3 +236,4 @@ if st.session_state.button_clicked:
                         st.write(f"Total Sale Price: ${total_sale_price:,.2f}")
                         st.write(f"Loan Amount: ${loan_amount:,.2f}")
                         st.write(f"Cash to Close
+                        
