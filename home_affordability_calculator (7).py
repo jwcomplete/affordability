@@ -237,12 +237,4 @@ if st.session_state.button_clicked:
 
             if next_formula:
                 new_cash_to_close_next = total_sale_price * (loan_formulas[next_formula]["down_payment"] / 100)
-                if st.button(f"🔄 Switch to {next_formula} (Eligible Formula)\nTotal Cash to Close: ${new_cash_to_close_next:,.2f}"):
-                    selected_formula = next_formula
-                    down_payment_pct = loan_formulas[next_formula]["down_payment"] / 100
-                    total_sale_price, loan_amount, cash_to_close, monthly_payment, total_monthly_payment = calculate_loan(
-                        purchase_price, loan_term, interest_rate, down_payment_pct, loan_formulas[next_formula]["seller_concession"] / 100, property_tax, home_insurance, flood_insurance
-                    )
-
-                    if total_sale_price and loan_amount and cash_to_close and monthly_payment and total_monthly_payment:
-                        st.write(f"Total Sale Price: ${total_sale_price
+                if st.button(f"🔄 Switch to
