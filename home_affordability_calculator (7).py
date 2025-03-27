@@ -111,15 +111,14 @@ if st.button("📊 Calculate Loan & Monthly Payment"):
         show_original_results = False
         errors.append(f"Loan exceeds high-balance max for {num_units}-unit: ${limits['high_balance']:,.2f}")
 
-    if show_original_results:
+    if not show_original_results:
+        for msg in errors:
+            st.markdown(f'<div style="background-color:red; color:white; padding:10px;">{msg}</div>', unsafe_allow_html=True)
+        st.markdown("**Please consider adjusting your down payment or selecting a different loan formula.**")
+    else:
         st.subheader("💼 Loan Summary")
         st.write(f"Total Sale Price: ${total_sale_price:,.2f}")
         st.write(f"Loan Amount: ${loan_amount:,.2f}")
         st.write(f"Cash to Close: ${cash_to_close:,.2f}")
         st.write(f"Monthly Payment: ${monthly_payment:,.2f}")
         st.write(f"Total Monthly Payment (Including Taxes & Insurance): ${total_monthly_payment:,.2f}")
-    else:
-        for msg in errors:
-            st.markdown(f'<div style="background-color:red; color:white; padding:10px;">{msg}</div>', unsafe_allow_html=True)
-
-        st.markdown("**Please consider adjusting your down payment or selecting a different loan formula.**")
