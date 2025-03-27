@@ -206,4 +206,3 @@ if st.session_state.button_clicked:
         for key, values in loan_formulas.items():
             if key != selected_formula and key.startswith("HB") and (loan_limits[num_units]["conforming"] < purchase_price * (1 - values["down_payment"] / 100) <= loan_limits[num_units]["high_balance"]):
                 next*** ▋
-            
