@@ -3,7 +3,7 @@ import streamlit as st
 
 st.set_page_config(page_title="Build Your Profile", layout="wide")
 
-# Custom CSS for input widths and styling placeholders
+# Custom CSS for input widths
 st.markdown("""
     <style>
     div[data-baseweb="input"] input {
@@ -11,34 +11,11 @@ st.markdown("""
     }
     .stNumberInput input {
         width: 200px;
-        padding-left: 20px;
     }
     div[data-baseweb="select"] {
         max-width: 180px;
     }
-    .stNumberInput input::placeholder {
-        color: gray;
-    }
     </style>
-""", unsafe_allow_html=True)
-
-# JavaScript to handle placeholder behavior
-st.markdown("""
-    <script>
-    const elements = document.querySelectorAll('.stNumberInput input');
-    elements.forEach(el => {
-        el.onfocus = function() {
-            if (this.value === "$0.00") {
-                this.value = "";
-            }
-        };
-        el.onblur = function() {
-            if (this.value === "") {
-                this.value = "$0.00";
-            }
-        };
-    });
-    </script>
 """, unsafe_allow_html=True)
 
 st.title("📄 Build Your Profile")
@@ -55,8 +32,7 @@ with col1:
 
     col_val, col_occ, col_flood, col_units = st.columns([2.5, 2, 1.5, 1])
     with col_val:
-        st.markdown("**Estimated Value ($)**")
-        estimated_value = st.number_input("", min_value=0.0, max_value=9999999999.00, step=1000.0, format="%0.2f", value=0.00, key="estimated_value", help="Enter the estimated value")
+        estimated_value = st.number_input("Estimated Value ($)", min_value=0.0, max_value=9999999999.00, step=1000.0)
     with col_occ:
         occupancy_type = st.selectbox("Intended Occupancy", ["Owner-Occupied", "Second Home", "Investment"])
     with col_flood:
@@ -89,19 +65,15 @@ with col1:
             has_bathroom = st.selectbox(" ", ["No", "Yes"], key="has_bathroom")
 
         if all(ans == "Yes" for ans in [interior_separation, has_kitchen, has_bathroom]) and num_units == 1:
-            st.markdown("**Proposed Market Rent for Accessory Unit ($)**")
-            proposed_rent = st.number_input("", min_value=0.0, format="%0.2f", value=0.00, key="proposed_rent", help="Enter the proposed market rent")
+            proposed_rent = st.number_input("Proposed Market Rent for Accessory Unit ($)", min_value=0.0)
 
 with col2:
     st.markdown("### 💵 Financial Information")
     col_f1, col_f2 = st.columns([1, 1])
     with col_f1:
-        st.markdown("**Cash Available to Close ($)**")
-        cash_available = st.number_input("", min_value=0.0, max_value=9999999999.00, step=1000.0, format="%0.2f", value=0.00, key="cash_available", help="Enter the cash available to close")
-        st.markdown("**Included Monthly Debts ($)**")
-        monthly_debts = st.number_input("", min_value=0.0, max_value=9999999999.00, step=100.0, format="%0.2f", value=0.00, key="monthly_debts", help="Enter the included monthly debts")
+        cash_available = st.number_input("Cash Available to Close ($)", min_value=0.0, max_value=9999999999.00, step=1000.0)
+        monthly_debts = st.number_input("Included Monthly Debts ($)", min_value=0.0, max_value=9999999999.00, step=100.0)
     with col_f2:
-        st.markdown("**Qualifying Income ($/year)**")
-        qualifying_income = st.number_input("", min_value=0.0, max_value=9999999999.00, step=1000.0, format="%0.2f", value=0.00, key="qualifying_income", help="Enter the qualifying income")
+        qualifying_income = st.number_input("Qualifying Income ($/year)", min_value=0.0, max_value=9999999999.00, step=1000.0)
 
 st.button("✅ Save Profile")
