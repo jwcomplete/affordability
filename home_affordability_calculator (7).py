@@ -10,8 +10,6 @@ results_dir = './results'
 if not os.path.exists(results_dir):
     os.makedirs(results_dir)
 
-# Your existing code...
-
 # Save results to a file
 def save_results(total_sale_price, loan_amount, cash_to_close, monthly_payment, total_monthly_payment):
     results = {
@@ -23,14 +21,6 @@ def save_results(total_sale_price, loan_amount, cash_to_close, monthly_payment, 
     }
     df = pd.DataFrame([results])
     df.to_csv(os.path.join(results_dir, 'loan_summary.csv'), index=False)
-
-# Existing code inside st.session_state.button_clicked block...
-
-if st.session_state.button_clicked:
-    # Existing code...
-    
-    # Save results
-    save_results(total_sale_price, loan_amount, cash_to_close, monthly_payment, total_monthly_payment)
 
 # Loan formula setup and max limits
 loan_formulas = {
@@ -161,9 +151,11 @@ if st.session_state.button_clicked:
 
     # Validate conforming formulas
     if selected_formula.startswith("C") and loan_amount > loan_limits[num_units]["conforming"]:
-        st.markdown(f'<div style="background-color:red; color:white; padding:10px; font-size:16px;">'
-                    f'<strong>Loan amount (${loan_amount:,.2f}) exceeds the conforming limit for {num_units}-unit property (${loan_limits[num_units]["conforming"]:,.2f}).</strong></div>',
-                    unsafe_allow_html=True)
+        st.markdown(
+            f'<div style="background-color:red; color:white; padding:10px; font-size:16px;">'
+            f'<strong>Loan amount (${loan_amount:,.2f}) exceeds the conforming limit for {num_units}-unit property (${loan_limits[num_units]["conforming"]:,.2f}).</strong></div>',
+            unsafe_allow_html=True
+        )
 
         # Option to apply new down payment and recalculate
         adjusted_down_payment_pct = ((loan_amount - loan_limits[num_units]["conforming"]) / total_sale_price) + down_payment_pct
@@ -204,13 +196,15 @@ if st.session_state.button_clicked:
 
     # Validate high balance formulas
     elif selected_formula.startswith("HB") and (loan_amount <= loan_limits[num_units]["conforming"] or loan_amount > loan_limits[num_units]["high_balance"]):
-        st.markdown(f'<div style="background-color:red; color:white; padding:10px; font-size:16px;">'
-                    f'<strong>Loan amount (${loan_amount:,.2f}) exceeds the high-balance limit for {num_units}-unit property (${loan_limits[num_units]["high_balance"]:,.2f}) or is below the confo[...]
-                    unsafe_allow_html=True)
+        st.markdown(
+            f'<div style="background-color:red; color:white; padding:10px; font-size:16px;">'
+            f'<strong>Loan amount (${loan_amount:,.2f}) exceeds the high-balance limit for {num_units}-unit property (${loan_limits[num_units]["high_balance"]:,.2f}) or is below the conforming loan limit.</strong></div>',
+            unsafe_allow_html=True
+        )
 
         next_formula = None
         for key, values in loan_formulas.items():
-            if key != selected_formula and key.startswith("HB") and (loan_limits[num_units]["conforming"] < purchase_price * (1 - values["down_payment"] / 100) <= loan_limits[num_units]["high_bal[...]
+            if key != selected_formula and key.startswith("HB") and (loan_limits[num_units]["conforming"] < purchase_price * (1 - values["down_payment"] / 100) <= loan_limits[num_units]["high_balance"]):
                 next_formula = key
                 break
 
@@ -229,9 +223,11 @@ if st.session_state.button_clicked:
 
     # Check if the loan amount exceeds the max loan limit
     if loan_amount > max_loan_limit:
-        st.markdown(f'<div style="background-color:red; color:white; padding:10px; font-size:16px;">'
-                    f'<strong>{selected_formula} is ineligible because the loan amount (${loan_amount:,.2f}) exceeds the max loan limit (${max_loan_limit:,.2f}).</strong></div>',
-                    unsafe_allow_html=True)
+        st.markdown(
+            f'<div style="background-color:red; color:white; padding:10px; font-size:16px;">'
+            f'<strong>{selected_formula} is ineligible because the loan amount (${loan_amount:,.2f}) exceeds the max loan limit (${max_loan_limit:,.2f}).</strong></div>',
+            unsafe_allow_html=True
+        )
 
         adjusted_down_payment = ((loan_amount - max_loan_limit) / total_sale_price * 100) + loan_formulas[selected_formula]["down_payment"]
         new_cash_to_close = total_sale_price * (adjusted_down_payment / 100)
@@ -260,4 +256,5 @@ if st.session_state.button_clicked:
             if st.button(f"🔄 Switch to {next_formula} (Eligible Formula)\nTotal Cash to Close: ${new_cash_to_close_next:,.2f}"):
                 selected_formula = next_formula
                 down_payment_pct = loan_formulas[next_formula]["down_payment"] / 100
-                total_sale_price, loan_amount,
+                total_sale_price, loan_amount, cash_to_close, monthly_payment, total_monthly_payment = calculate_loan(
+                    purchase_price, loan_term, interest_rate, down_payment_pct, loan_formulas[next_formula]["seller_concession"] / 100, property_tax
