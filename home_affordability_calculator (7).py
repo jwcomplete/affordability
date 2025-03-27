@@ -1,8 +1,36 @@
 
 import streamlit as st
+import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
+import os
+
+# Directory to save results
+results_dir = './results'
+if not os.path.exists(results_dir):
+    os.makedirs(results_dir)
+
+# Your existing code...
+
+# Save results to a file
+def save_results(total_sale_price, loan_amount, cash_to_close, monthly_payment, total_monthly_payment):
+    results = {
+        'Total Sale Price': total_sale_price,
+        'Loan Amount': loan_amount,
+        'Cash to Close': cash_to_close,
+        'Monthly Payment': monthly_payment,
+        'Total Monthly Payment': total_monthly_payment
+    }
+    df = pd.DataFrame([results])
+    df.to_csv(os.path.join(results_dir, 'loan_summary.csv'), index=False)
+
+# Existing code inside st.session_state.button_clicked block...
+
+if st.session_state.button_clicked:
+    # Existing code...
+    
+    # Save results
+    save_results(total_sale_price, loan_amount, cash_to_close, monthly_payment, total_monthly_payment)
 
 # Loan formula setup and max limits
 loan_formulas = {
