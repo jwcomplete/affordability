@@ -237,4 +237,4 @@ if st.session_state.button_clicked:
 
             if next_formula:
                 new_cash_to_close_next = total_sale_price * (loan_formulas[next_formula]["down_payment"] / 100)
-                if st.button(f"🔄 Switch to
+                if st.button(f"🔄 Switch to {next_formula} (Eligible
