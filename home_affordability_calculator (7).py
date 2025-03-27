@@ -232,11 +232,7 @@ if st.session_state.button_clicked:
                         purchase_price, loan_term, interest_rate, down_payment_pct, loan_formulas[next_formula]["seller_concession"] / 100, property_tax, home_insurance, flood_insurance
                     )
 
-                   if total_sale_price and loan_amount and cash_to_close and monthly_payment and total_monthly_payment:
-    st.write(f"Total Sale Price: ${total_sale_price:,.2f}")
-    st.write(f"Loan Amount: ${loan_amount:,.2f}")
-    st.write(f"Cash to Close: ${cash_to_close:,.2f}")
-    st.write(f"Monthly Payment: ${monthly_payment:,.2f}")
-    st.write(f"Total Monthly Payment (Including Taxes & Insurance): ${total_monthly_payment:,.2f}")
-
-    # Validate conforming formulas and other logic follows here...
+                    if total_sale_price and loan_amount and cash_to_close and monthly_payment and total_monthly_payment:
+                        st.write(f"Total Sale Price: ${total_sale_price:,.2f}")
+                        st.write(f"Loan Amount: ${loan_amount:,.2f}")
+                        st.write(f
