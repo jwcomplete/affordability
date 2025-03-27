@@ -233,4 +233,8 @@ if st.session_state.button_clicked:
                     )
 
                     if total_sale_price and loan_amount and cash_to_close and monthly_payment and total_monthly_payment:
-                        st.write(f"Total Sale Price: ${total_sale_price:,.2
+    st.write(f"Total Sale Price: ${total_sale_price:,.2f}")
+    st.write(f"Loan Amount: ${loan_amount:,.2f}")
+    st.write(f"Cash to Close: ${cash_to_close:,.2f}")
+    st.write(f"Monthly Payment: ${monthly_payment:,.2f}")
+    st.write(f"Total Monthly Payment (Including Taxes & Insurance): ${total_monthly_payment:,.2f}")
