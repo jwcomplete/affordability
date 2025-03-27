@@ -32,7 +32,7 @@ jobs:
         python "home_affordability_calculator (7).py"
 
     - name: Archive results
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: build-results
         path: ./results/
