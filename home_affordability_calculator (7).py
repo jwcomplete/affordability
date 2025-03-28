@@ -1,8 +1,8 @@
 
-/import streamlit as st
+import streamlit as st
 
 # Loan formula setup and max limits
-/loan_formulas = {
+loan_formulas = {
     "C.3.0 – 3% down closing costs out of pocket": {"down_payment": 3, "seller_concession": 0, "max_ltv": 97},
     "C.3.3 – 3% down 3% seller credit": {"down_payment": 3, "seller_concession": 3, "max_ltv": 97},
     "C.5.0 – 5% down 0% seller credit": {"down_payment": 5, "seller_concession": 0, "max_ltv": 95},
