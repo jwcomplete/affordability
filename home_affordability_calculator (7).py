@@ -1,4 +1,3 @@
-
 import streamlit as st
 
 # Loan formula setup and max limits
@@ -31,10 +30,10 @@ loan_formulas = {
 
 # **Loan Limits for Conforming & High-Balance Loans**
 loan_limits = {
-    1: {"conforming": 806500, "high_balance": 1209750},
-    2: {"conforming": 1032650, "high_balance": 1548975},
-    3: {"conforming": 1248150, "high_balance": 1872225},
-    4: {"conforming": 1551250, "high_balance": 2326875}
+    1: {"conforming": 832750, "high_balance": 1249129},
+    2: {"conforming": 1066250, "high_balance": 1599375},
+    3: {"conforming": 1288800, "high_balance": 1933200},
+    4: {"conforming": 1601750, "high_balance": 2402625}
 }
 
 # Function to calculate loan details
@@ -153,16 +152,7 @@ if st.session_state.button_clicked:
     # Validate high balance formulas
     elif selected_formula.startswith("HB") and (loan_amount <= loan_limits[num_units]["conforming"] or loan_amount > loan_limits[num_units]["high_balance"]):
         show_original_results = False
-        st.error(f"Loan amount (${loan_amount:,.2f}) exceeds the high-balance limit for {num_units}-unit property (${loan_limits[num_units]['high_balance']:,.2f}) or is below the conforming limit (${loan_limits[num_units]['conforming']:,.2f}).")
-        next_formula = None
-        for key, values in loan_formulas.items():
-            if key != selected_formula and key.startswith("HB") and (loan_limits[num_units]["conforming"] < purchase_price * (1 - values["down_payment"] / 100) <= loan_limits[num_units]["high_balance"]):
-                next_formula = key
-                break
-
-        if next_formula:
-            new_cash_to_close_next = total_sale_price * (loan_formulas[next_formula]["down_payment"] / 100)
-            if st.button(f"🔄 Switch to {next_formula} (Eligible Formula)\nTotal Cash to Close: ${new_cash_to_close_next:,.2f}"):
+        st.error(f"Loan amount (${loan_amount:,.2f}) exceeds the high-balance limit for {num_units}-unit property (${loan_limits[num_units]['high_balance']:,.2f}) or is below the conforming limit[...]\nTotal Cash to Close: ${new_cash_to_close:,.2f}"):
                 selected_formula = next_formula
                 down_payment_pct = loan_formulas[next_formula]["down_payment"] / 100
                 total_sale_price, loan_amount, cash_to_close, monthly_payment, total_monthly_payment = calculate_loan(
