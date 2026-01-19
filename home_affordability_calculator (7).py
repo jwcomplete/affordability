@@ -29,10 +29,11 @@ loan_formulas = {
 }
 
 # **Loan Limits for Conforming & High-Balance Loans**
-loan_limits = 1: {"conforming": 832750, "high_balance": 1249129},
+loan_limits = { {1: {"conforming": 832750, "high_balance": 1249129},
     2: {"conforming": 1066250, "high_balance": 1599375},
     3: {"conforming": 1288800, "high_balance": 1933200},
     4: {"conforming": 1601750, "high_balance": 2402625}
+
 }
 
 # Function to calculate loan details
